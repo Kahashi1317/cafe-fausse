@@ -10,6 +10,7 @@ export default function ReservationsPage() {
     phone: ""
   });
 
+  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
   const [error, setError] = useState(null);
 
@@ -20,10 +21,34 @@ export default function ReservationsPage() {
     });
   }
 
+  function validateForm() {
+    if (formData.name.trim().length < 2) {
+      return "Name must be at least 2 characters.";
+    }
+    if (!formData.email.includes("@") || !formData.email.includes(".")) {
+      return "Please enter a valid email address.";
+    }
+    if (formData.guests < 1 || formData.guests > 10) {
+      return "Guests must be between 1 and 10.";
+    }
+    if (!formData.timeSlot) {
+      return "Please select a time slot.";
+    }
+    return null;
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
     setMessage(null);
     setError(null);
+
+    const validationError = validateForm();
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
+    setLoading(true);
 
     try {
       const response = await fetch("http://localhost:5000/api/reservations", {
@@ -35,13 +60,27 @@ export default function ReservationsPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.message);
+        setError(data.message || "Reservation failed.");
       } else {
         setMessage(`Reservation confirmed! Your table number: ${data.tableNumber}`);
       }
     } catch (err) {
       setError("Server error. Please try again.");
     }
+
+    setLoading(false);
+  }
+
+  function resetForm() {
+    setFormData({
+      timeSlot: "",
+      guests: 1,
+      name: "",
+      email: "",
+      phone: ""
+    });
+    setMessage(null);
+    setError(null);
   }
 
   return (
@@ -105,7 +144,13 @@ export default function ReservationsPage() {
           />
         </label>
 
-        <button type="submit">Reserve Table</button>
+        <button type="submit" disabled={loading}>
+          {loading ? "Processing..." : "Reserve Table"}
+        </button>
+
+        <button type="button" onClick={resetForm} className="reset-btn">
+          Reset
+        </button>
       </form>
 
       {message && <p className="success-message">{message}</p>}

@@ -9,6 +9,7 @@
   --bg: #fafafa;
   --text: #333;
   --radius: 10px;
+  --shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 body {
@@ -26,7 +27,7 @@ body {
 
 h1, h2 {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 p {
@@ -121,7 +122,7 @@ p {
   background: white;
   padding: 15px;
   border-radius: var(--radius);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow);
 }
 
 .menu-item-header {
@@ -136,7 +137,7 @@ p {
 }
 
 /* =========================================
-   RESERVATIONS PAGE (Flexbox)
+   RESERVATIONS PAGE (Improved UI)
    ========================================= */
 
 .reservation-form {
@@ -145,6 +146,14 @@ p {
   gap: 15px;
   max-width: 500px;
   margin: 0 auto;
+  background: white;
+  padding: 25px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.reservation-form label {
+  font-weight: bold;
 }
 
 .reservation-form input {
@@ -162,6 +171,7 @@ button {
   cursor: pointer;
   font-size: 16px;
   border-radius: var(--radius);
+  margin-top: 10px;
 }
 
 button:hover {
@@ -181,18 +191,27 @@ button[disabled] {
   background-color: #777;
 }
 
+/* Success + Error Messages */
 .success-message {
   color: green;
+  background: #e6ffe6;
+  padding: 12px;
+  border-radius: var(--radius);
   font-weight: bold;
   margin-top: 20px;
   text-align: center;
+  box-shadow: var(--shadow);
 }
 
 .error-message {
   color: red;
+  background: #ffe6e6;
+  padding: 12px;
+  border-radius: var(--radius);
   font-weight: bold;
   margin-top: 20px;
   text-align: center;
+  box-shadow: var(--shadow);
 }
 
 /* =========================================
@@ -208,7 +227,7 @@ button[disabled] {
   padding: 15px;
   border-radius: var(--radius);
   margin-top: 15px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow);
 }
 
 /* =========================================
