@@ -6,13 +6,27 @@ import random
 from models import create_customer, count_reservations, create_reservation
 
 app = Flask(__name__)
-CORS(app)
 
-# -------------------------
+# -----------------------------------------
+# CORS CONFIGURATION (React -> Flask)
+# -----------------------------------------
+CORS(
+    app,
+    resources={r"/api/*": {"origins": "http://localhost:3000"}},
+    supports_credentials=True
+)
+
+app.config["CORS_HEADERS"] = "Content-Type"
+
+# -----------------------------------------
 # POST /api/reservations
-# -------------------------
-@app.post("/api/reservations")
+# -----------------------------------------
+@app.route("/api/reservations", methods=["POST", "OPTIONS"])
 def reservations():
+    # Handle CORS preflight
+    if request.method == "OPTIONS":
+        return jsonify({}), 200
+
     data = request.json
 
     name = data.get("name")
@@ -20,6 +34,10 @@ def reservations():
     phone = data.get("phone")
     guests = data.get("guests")
     time_slot = data.get("timeSlot")
+
+    # Convert React datetime format: "2026-08-20T23:00" -> "2026-08-20 23:00"
+    if time_slot and "T" in time_slot:
+        time_slot = time_slot.replace("T", " ")
 
     # Basic validation
     if not name or len(name) < 2:
@@ -55,11 +73,15 @@ def reservations():
     }), 200
 
 
-# -------------------------
+# -----------------------------------------
 # POST /api/newsletter
-# -------------------------
-@app.post("/api/newsletter")
+# -----------------------------------------
+@app.route("/api/newsletter", methods=["POST", "OPTIONS"])
 def newsletter():
+    # Handle CORS preflight
+    if request.method == "OPTIONS":
+        return jsonify({}), 200
+
     data = request.json
     email = data.get("email")
 
@@ -71,9 +93,9 @@ def newsletter():
     return jsonify({"message": "Signed up!", "customerId": customer_id}), 200
 
 
-# -------------------------
-# GET /api/menu (optional)
-# -------------------------
+# -----------------------------------------
+# GET /api/menu
+# -----------------------------------------
 @app.get("/api/menu")
 def menu():
     return jsonify({
@@ -83,9 +105,9 @@ def menu():
     })
 
 
-# -------------------------
-# GET /api/gallery (optional)
-# -------------------------
+# -----------------------------------------
+# GET /api/gallery
+# -----------------------------------------
 @app.get("/api/gallery")
 def gallery():
     return jsonify([
@@ -94,5 +116,8 @@ def gallery():
     ])
 
 
+# -----------------------------------------
+# RUN APP
+# -----------------------------------------
 if __name__ == "__main__":
     app.run(debug=True)
