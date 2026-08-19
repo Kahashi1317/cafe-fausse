@@ -1,4 +1,3 @@
-// src/components/NavigationLinks.jsx
 import { Link } from "react-router-dom";
 
 export default function NavigationLinks() {

@@ -1,9 +1,8 @@
-// src/components/FeaturedImages.jsx
 export default function FeaturedImages() {
   const images = [
-    "/images/interior.jpg",
-    "/images/dish1.jpg",
-    "/images/dish2.jpg"
+    "https://via.placeholder.com/400x300?text=Interior",
+    "https://via.placeholder.com/400x300?text=Dish+1",
+    "https://via.placeholder.com/400x300?text=Dish+2"
   ];
 
   return (
